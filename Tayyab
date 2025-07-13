@@ -1,0 +1,504 @@
+import React, { useState, useEffect } from 'react';
+
+// Main App component for The Nexus Times website
+const App: React.FC = () => {
+    // State to manage the current language: 'en' for English, 'ur' for Urdu
+    const [currentLanguage, setCurrentLanguage] = useState<'en' | 'ur'>('en');
+
+    // useEffect hook to update the HTML lang and body direction attributes
+    // whenever the currentLanguage state changes. This is important for accessibility
+    // and proper text rendering, especially for RTL languages like Urdu.
+    useEffect(() => {
+        document.documentElement.lang = currentLanguage; // Set HTML lang attribute
+        document.body.style.direction = currentLanguage === 'ur' ? 'rtl' : 'ltr'; // Set text direction
+    }, [currentLanguage]); // Dependency array: runs when currentLanguage changes
+
+    // Function to handle language button clicks
+    const handleLanguageChange = (lang: 'en' | 'ur') => {
+        setCurrentLanguage(lang); // Update the language state
+    };
+
+    // Helper function to conditionally display content based on the current language
+    const LanguageContent: React.FC<{ english: React.ReactNode; urdu: React.ReactNode }> = ({ english, urdu }) => {
+        return (
+            <>
+            { currentLanguage === 'en' && <span className= "english-content" > { english } < /span>}
+        {
+            currentLanguage === 'ur' && <span className="urdu-content" > { urdu } < /span>}
+                < />
+        );
+    };
+
+return (
+    <>
+    {/* Custom styles for the body, container, section titles, and news cards */ }
+            {/* In a larger React project, these might be in a separate CSS file or a CSS-in-JS solution */ }
+<style>
+    {`
+                body {
+                    font-family: 'Inter', sans-serif;
+                    background-color: #f3f4f6; /* Light gray background */
+                    color: #374151; /* Dark gray text */
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 1rem;
+                }
+                .section-title {
+                    border-left: 4px solid #ef4444; /* Red accent */
+                    padding-left: 0.75rem;
+                    margin-bottom: 1.5rem;
+                }
+                .news-card {
+                    background-color: #ffffff;
+                    border-radius: 0.75rem; /* Rounded corners */
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s ease-in-out;
+                }
+                .news-card:hover {
+                    transform: translateY(-5px);
+                }
+                .news-card img {
+                    width: 100%;
+                    height: 200px;
+                    object-fit: cover;
+                    border-top-left-radius: 0.75rem;
+                    border-top-right-radius: 0.75rem;
+                }
+                .language-toggle button {
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.5rem;
+                    font-weight: 500;
+                    transition: background-color 0.2s;
+                }
+                .language-toggle button.active {
+                    background-color: #ef4444; /* Red */
+                    color: #ffffff;
+                }
+                .language-toggle button:not(.active):hover {
+                    background-color: #e5e7eb; /* Light gray on hover */
+                }
+                /* Ensure Urdu content is displayed correctly when active */
+                .urdu-content {
+                    display: inline; /* Overridden by JS, but good fallback */
+                }
+                .english-content {
+                    display: inline; /* Overridden by JS, but good fallback */
+                }
+                `}
+</style>
+
+{/* Header Section */ }
+<header className="bg-white shadow-md py-4" >
+    <div className="container flex flex-col md:flex-row justify-between items-center" >
+        {/* Site Logo/Title */ }
+        < a href = "#" className = "text-3xl font-extrabold text-gray-900 mb-4 md:mb-0" > The Nexus Times < /a>
+
+{/* Navigation Links */ }
+<nav className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-lg font-medium" >
+    <a href="#" className = "text-gray-700 hover:text-red-600 transition-colors" >
+        <LanguageContent english="Home" urdu = "صفحہ اول" />
+            </a>
+            < a href = "#" className = "text-gray-700 hover:text-red-600 transition-colors" >
+                <LanguageContent english="Current Affairs" urdu = "حالات حاضرہ" />
+                    </a>
+                    < a href = "#" className = "text-gray-700 hover:text-red-600 transition-colors" >
+                        <LanguageContent english="Games" urdu = "گیمز" />
+                            </a>
+                            < a href = "#" className = "text-gray-700 hover:text-red-600 transition-colors" >
+                                <LanguageContent english="Health" urdu = "صحت" />
+                                    </a>
+                                    < a href = "#" className = "text-gray-700 hover:text-red-600 transition-colors" >
+                                        <LanguageContent english="Daily Life" urdu = "روزمرہ زندگی" />
+                                            </a>
+                                            < /nav>
+
+{/* Language Toggle Buttons */ }
+<div className="language-toggle mt-4 md:mt-0 flex gap-2" >
+    <button
+                            id="lang-en"
+className = {`bg-gray-200 text-gray-700 ${currentLanguage === 'en' ? 'active' : ''}`}
+onClick = {() => handleLanguageChange('en')}
+                        >
+    English
+    < /button>
+    < button
+id = "lang-ur"
+className = {`bg-gray-200 text-gray-700 ${currentLanguage === 'ur' ? 'active' : ''}`}
+onClick = {() => handleLanguageChange('ur')}
+                        >
+    اردو
+    < /button>
+    < /div>
+    < /div>
+    < /header>
+
+{/* Main Content Area */ }
+<main className="container py-8" >
+    {/* Featured Section */ }
+    < section className = "mb-12" >
+        <h2 className="text-3xl font-bold text-gray-800 section-title mb-6" >
+            <LanguageContent english="Featured Articles" urdu = "نمایاں مضامین" />
+                </h2>
+                < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                    {/* Featured Article 1 */ }
+                    < div className = "news-card" >
+                        <img src="https://placehold.co/600x400/FF5733/FFFFFF?text=Global+News" alt = "Global News" />
+                            <div className="p-6" >
+                                <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                                    <LanguageContent
+                                        english="Global Leaders Discuss Climate Change at Summit"
+urdu = "عالمی رہنماؤں نے سربراہی اجلاس میں موسمیاتی تبدیلی پر تبادلہ خیال کیا۔"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 4, 2025 | Current Affairs" urdu = "4 جولائی 2025 | حالات حاضرہ" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="Leaders from around the world convened today to address the pressing issues of climate change, focusing on sustainable solutions and international cooperation."
+urdu = "دنیا بھر کے رہنما آج موسمیاتی تبدیلی کے اہم مسائل پر بات چیت کے لیے اکٹھے ہوئے، جس میں پائیدار حل اور بین الاقوامی تعاون پر توجہ دی گئی۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+
+{/* Featured Article 2 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33C7FF/FFFFFF?text=Gaming+Update" alt = "Gaming Update" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="New Gaming Console Unveiled with Revolutionary Graphics"
+urdu = "انقلابی گرافکس کے ساتھ نئے گیمنگ کنسول کی نقاب کشائی"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 3, 2025 | Games" urdu = "3 جولائی 2025 | گیمز" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="The gaming world is abuzz with the announcement of a next-generation console promising unparalleled visual fidelity and immersive gameplay."
+urdu = "گیمنگ کی دنیا اگلی نسل کے کنسول کے اعلان سے گونج رہی ہے جو بے مثال بصری وفاداری اور عمیق گیم پلے کا وعدہ کرتا ہے۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+
+{/* Featured Article 3 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33FF57/FFFFFF?text=Health+Tips" alt = "Health Tips" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Top 5 Superfoods to Boost Your Immunity This Season"
+urdu = "اس موسم میں آپ کی قوت مدافعت بڑھانے کے لیے 5 بہترین سپر فوڈز"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 2, 2025 | Health" urdu = "2 جولائی 2025 | صحت" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="Discover the most effective superfoods that can strengthen your immune system and keep you healthy during seasonal changes."
+urdu = "ان انتہائی مؤثر سپر فوڈز کو دریافت کریں جو موسمی تبدیلیوں کے دوران آپ کے مدافعتی نظام کو مضبوط اور آپ کو صحت مند رکھ سکتے ہیں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+            < /div>
+            < /section>
+
+{/* Current Affairs Section */ }
+<section className="mb-12" >
+    <h2 className="text-3xl font-bold text-gray-800 section-title mb-6" >
+        <LanguageContent english="Current Affairs" urdu = "حالات حاضرہ" />
+            </h2>
+            < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                {/* Article 1 */ }
+                < div className = "news-card" >
+                    <img src="https://placehold.co/600x400/FF5733/FFFFFF?text=Political+Update" alt = "Political Update" />
+                        <div className="p-6" >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                                <LanguageContent
+                                        english="Parliament Debates New Economic Policy Amidst Public Concerns"
+urdu = "عوامی خدشات کے درمیان پارلیمنٹ میں نئی اقتصادی پالیسی پر بحث"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 4, 2025" urdu = "4 جولائی 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="A heated debate took place in parliament today regarding the proposed economic reforms, with opposition parties raising questions about their impact on ordinary citizens."
+urdu = "آج پارلیمنٹ میں مجوزہ اقتصادی اصلاحات کے حوالے سے گرما گرم بحث ہوئی، اپوزیشن جماعتوں نے عام شہریوں پر ان کے اثرات کے بارے میں سوالات اٹھائے۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+{/* Article 2 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33FF57/FFFFFF?text=International+Relations" alt = "International Relations" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Diplomatic Efforts Intensify to Resolve Regional Conflict"
+urdu = "علاقائی تنازعہ حل کرنے کے لیے سفارتی کوششیں تیز"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 3, 2025" urdu = "3 جولائی 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="International mediators are working tirelessly to bring an end to the ongoing conflict in the region, with hopes for a peaceful resolution."
+urdu = "بین الاقوامی ثالث خطے میں جاری تنازعہ کو ختم کرنے کے لیے انتھک محنت کر رہے ہیں، پرامن حل کی امید کے ساتھ۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+{/* Article 3 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33C7FF/FFFFFF?text=Tech+News" alt = "Tech News" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Breakthrough in AI Technology Promises New Era of Innovation"
+urdu = "مصنوعی ذہانت کی ٹیکنالوجی میں پیش رفت نے جدت کے نئے دور کا وعدہ کیا ہے۔"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 2, 2025" urdu = "2 جولائی 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="Scientists have announced a significant advancement in artificial intelligence, potentially revolutionizing various industries and daily life."
+urdu = "سائنسدانوں نے مصنوعی ذہانت میں ایک اہم پیش رفت کا اعلان کیا ہے، جو ممکنہ طور پر مختلف صنعتوں اور روزمرہ کی زندگی میں انقلاب برپا کر سکتی ہے۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+            < /div>
+            < /section>
+
+{/* Games Section */ }
+<section className="mb-12" >
+    <h2 className="text-3xl font-bold text-gray-800 section-title mb-6" >
+        <LanguageContent english="Games" urdu = "گیمز" />
+            </h2>
+            < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                {/* Game Article 1 */ }
+                < div className = "news-card" >
+                    <img src="https://placehold.co/600x400/FF5733/FFFFFF?text=New+Game+Release" alt = "New Game Release" />
+                        <div className="p-6" >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                                <LanguageContent
+                                        english={ `"Cyberpunk Odyssey" Launches to Critical Acclaim` }
+urdu = {`"سائبر پنک اوڈیسی" کا آغاز تنقیدی پذیرائی کے ساتھ`}
+/>
+    < /h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="July 1, 2025" urdu = "1 جولائی 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="The highly anticipated open-world RPG, 'Cyberpunk Odyssey,' has finally been released, receiving rave reviews for its immersive world and compelling story."
+urdu = "انتہائی متوقع اوپن ورلڈ آر پی جی، 'سائبر پنک اوڈیسی،' آخر کار جاری کر دیا گیا ہے، جسے اس کی عمیق دنیا اور دلکش کہانی کے لیے زبردست جائزے ملے ہیں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+{/* Game Article 2 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33FF57/FFFFFF?text=Esports+Update" alt = "Esports Update" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Esports Championship Finals Set to Break Viewership Records"
+urdu = "ایسپورٹس چیمپئن شپ فائنلز دیکھنے کے ریکارڈ توڑنے کے لیے تیار"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="June 30, 2025" urdu = "30 جون 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="The grand finals of the annual esports championship are expected to attract millions of viewers worldwide, showcasing intense competition."
+urdu = "سالانہ ایسپورٹس چیمپئن شپ کے گرینڈ فائنلز سے دنیا بھر میں لاکھوں ناظرین کی توجہ حاصل ہونے کی توقع ہے، جس میں شدید مقابلہ پیش کیا جائے گا۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+            < /div>
+            < /section>
+
+{/* Health Section */ }
+<section className="mb-12" >
+    <h2 className="text-3xl font-bold text-gray-800 section-title mb-6" >
+        <LanguageContent english="Health" urdu = "صحت" />
+            </h2>
+            < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                {/* Health Article 1 */ }
+                < div className = "news-card" >
+                    <img src="https://placehold.co/600x400/33C7FF/FFFFFF?text=Mental+Wellness" alt = "Mental Wellness" />
+                        <div className="p-6" >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                                <LanguageContent
+                                        english="Understanding and Managing Digital Eye Strain"
+urdu = "ڈیجیٹل آئی سٹرین کو سمجھنا اور اس کا انتظام کرنا"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="June 29, 2025" urdu = "29 جون 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="With increased screen time, digital eye strain is a common issue. Learn practical tips to protect your eyes and maintain good vision."
+urdu = "اسکرین کے وقت میں اضافے کے ساتھ، ڈیجیٹل آئی سٹرین ایک عام مسئلہ ہے۔ اپنی آنکھوں کی حفاظت اور اچھی بصارت برقرار رکھنے کے لیے عملی تجاویز سیکھیں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+{/* Health Article 2 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/FF5733/FFFFFF?text=Fitness+Tips" alt = "Fitness Tips" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Simple Home Workouts for a Busy Schedule"
+urdu = "مصروف شیڈول کے لیے سادہ گھریلو ورزشیں"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="June 28, 2025" urdu = "28 جون 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="No time for the gym? Discover effective home workout routines that fit into even the busiest of schedules, helping you stay fit and active."
+urdu = "جم کے لیے وقت نہیں؟ مؤثر گھریلو ورزش کے معمولات دریافت کریں جو انتہائی مصروف شیڈول میں بھی فٹ بیٹھتے ہیں، جو آپ کو فٹ اور فعال رہنے میں مدد دیتے ہیں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+            < /div>
+            < /section>
+
+{/* Daily Life Section */ }
+<section className="mb-12" >
+    <h2 className="text-3xl font-bold text-gray-800 section-title mb-6" >
+        <LanguageContent english="Daily Life" urdu = "روزمرہ زندگی" />
+            </h2>
+            < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                {/* Daily Life Article 1 */ }
+                < div className = "news-card" >
+                    <img src="https://placehold.co/600x400/33FF57/FFFFFF?text=Home+Decor" alt = "Home Decor" />
+                        <div className="p-6" >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                                <LanguageContent
+                                        english="Budget-Friendly Home Decor Ideas to Refresh Your Space"
+urdu = "اپنی جگہ کو تازہ کرنے کے لیے بجٹ کے موافق گھریلو سجاوٹ کے خیالات"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="June 27, 2025" urdu = "27 جون 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="Transform your living space without breaking the bank with these creative and affordable home decor tips."
+urdu = "ان تخلیقی اور سستی گھریلو سجاوٹ کی تجاویز کے ساتھ اپنے رہنے کی جگہ کو بغیر کسی اضافی خرچ کے تبدیل کریں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+{/* Daily Life Article 2 */ }
+<div className="news-card" >
+    <img src="https://placehold.co/600x400/33C7FF/FFFFFF?text=Cooking+Tips" alt = "Cooking Tips" />
+        <div className="p-6" >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2" >
+                <LanguageContent
+                                        english="Quick and Healthy Dinner Recipes for Weeknights"
+urdu = "ہفتے کی راتوں کے لیے فوری اور صحت مند رات کے کھانے کی ترکیبیں"
+    />
+    </h3>
+    < p className = "text-gray-600 text-sm mb-4" >
+        <LanguageContent english="June 26, 2025" urdu = "26 جون 2025" />
+            </p>
+            < p className = "text-gray-700 leading-relaxed" >
+                <LanguageContent
+                                        english="Save time and eat well with these easy-to-prepare, nutritious dinner recipes perfect for busy weeknights."
+urdu = "وقت بچائیں اور ان آسان، غذائیت سے بھرپور رات کے کھانے کی ترکیبوں کے ساتھ اچھا کھائیں جو مصروف ہفتے کی راتوں کے لیے بہترین ہیں۔"
+    />
+    </p>
+    < a href = "#" className = "text-red-600 hover:underline mt-4 inline-block" >
+        <LanguageContent english="Read More" urdu = "مزید پڑھیں" />
+            </a>
+            < /div>
+            < /div>
+            < /div>
+            < /section>
+            < /main>
+
+{/* Footer Section */ }
+<footer className="bg-gray-800 text-white py-8" >
+    <div className="container flex flex-col md:flex-row justify-between items-center text-center md:text-left" >
+        <div className="mb-4 md:mb-0" >
+            <p>
+            <LanguageContent english="&copy; 2025 The Nexus Times. All rights reserved." urdu = "© 2025 دی نیکسس ٹائمز۔ تمام حقوق محفوظ ہیں۔" />
+                </p>
+                < /div>
+                < nav className = "flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-sm" >
+                    <a href="#" className = "hover:text-red-400 transition-colors" >
+                        <LanguageContent english="About Us" urdu = "ہمارے بارے میں" />
+                            </a>
+                            < a href = "#" className = "hover:text-red-400 transition-colors" >
+                                <LanguageContent english="Contact Us" urdu = "ہم سے رابطہ کریں" />
+                                    </a>
+                                    < a href = "#" className = "hover:text-red-400 transition-colors" >
+                                        <LanguageContent english="Privacy Policy" urdu = "رازداری کی پالیسی" />
+                                            </a>
+                                            < a href = "#" className = "hover:text-red-400 transition-colors" >
+                                                <LanguageContent english="Terms of Service" urdu = "سروس کی شرائط" />
+                                                    </a>
+                                                    < /nav>
+                                                    < /div>
+                                                    < /footer>
+                                                    < />
+    );
+};
+
+export default App;
